@@ -105,6 +105,7 @@ export default function LibraryScreen() {
             data={completedData}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
+              
               <View style={styles.card}>
                 <View>
                   <Image
@@ -151,7 +152,9 @@ export default function LibraryScreen() {
 
       case "saved":
         return (
+         
           <FlatList
+        
             data={savedData}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
@@ -192,6 +195,7 @@ export default function LibraryScreen() {
               </View>
             )}
           />
+         
         );
     }
   };
