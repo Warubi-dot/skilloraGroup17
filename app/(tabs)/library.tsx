@@ -12,6 +12,7 @@ import {
   AntDesign,
   MaterialIcons,
 } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 type TabType = "progress" | "completed" | "saved";
 
@@ -67,6 +68,8 @@ export default function LibraryScreen() {
     switch (activeTab) {
       case "progress":
         return (
+          <TouchableOpacity
+          onPress={()=>{router.push("/module")}}>
           <FlatList
             data={inProgressData}
             keyExtractor={(item) => item.id}
@@ -97,6 +100,7 @@ export default function LibraryScreen() {
               </View>
             )}
           />
+          </TouchableOpacity>
         );
 
       case "completed":

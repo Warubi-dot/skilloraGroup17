@@ -22,7 +22,7 @@ export default function SplashScreen() {
 
       {/* Footer  */}
        <Text style={styles.footer}>
-        Secured by your TechCrush Group 17.
+        Secured By TechCrush Group 17.
       </Text>
     </View>
     

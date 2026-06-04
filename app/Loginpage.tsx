@@ -1,4 +1,4 @@
-import { Link, router, Stack, useRouter } from "expo-router";
+import { Link, Stack, useRouter } from "expo-router";
 
 import React, { useState } from "react";
 import {View,Text,TextInput,TouchableOpacity,StyleSheet,SafeAreaView,Image, ScrollView, Alert,} from "react-native";
@@ -9,51 +9,51 @@ import { Ionicons } from "@expo/vector-icons";
 
 
 
-const Login = useRouter()
+
 export default function Loginpage() {
-  const{setUser}= useAuth();
-  const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+  // const{setUser}= useAuth();
+  // const [email, setEmail] = useState("");
+  //   const [password, setPassword] = useState("");
   
-    const handleLogin = async () => {
-      try {
-        const storedUsers =
-          await AsyncStorage.getItem("users");
+    // const handleLogin = async () => {
+    //   try {
+    //     const storedUsers =
+    //       await AsyncStorage.getItem("users");
   
-        const users = storedUsers
-          ? JSON.parse(storedUsers)
-          : [];
+    //     const users = storedUsers
+    //       ? JSON.parse(storedUsers)
+    //       : [];
   
-        const user = users.find(
-          (u: any) =>
-            u.email === email &&
-            u.password === password
-        );
+    //     const user = users.find(
+    //       (u: any) =>
+    //         u.email === email &&
+    //         u.password === password
+    //     );
   
-        if (!user) {
-          Alert.alert(
-            "Login Failed",
-            "Invalid email or password"
-          );
-          return;
-        }
+    //     if (!user) {
+    //       Alert.alert(
+    //         "Login Failed",
+    //         "Invalid email or password"
+    //       );
+    //       return;
+    //     }
   
-        await AsyncStorage.setItem(
-          "currentUser",
-          JSON.stringify(user)
-        );
+    //     await AsyncStorage.setItem(
+    //       "currentUser",
+    //       JSON.stringify(user)
+    //     );
   
-        Alert.alert(
-          "Success",
-          `Welcome ${user.name}`
-        );
+    //     Alert.alert(
+    //       "Success",
+    //       `Welcome ${user.name}`
+    //     );
   
-        router.replace("/Home");
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const [showPassword, setShowPassword] = useState(false)
+    //     router.replace("/Home");
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
+   
   return (
    <>
     <Stack.Screen
@@ -61,8 +61,7 @@ export default function Loginpage() {
    
   
     <SafeAreaView style={styles.container}>
-      <ScrollView  showsVerticalScrollIndicator={false}
-    >
+      <ScrollView  showsVerticalScrollIndicator={false}>
       <View style={styles.logoContainer}>
         <Image
           source={require("../assets/images/skillora-logo.png")}
@@ -84,8 +83,6 @@ export default function Loginpage() {
           <TextInput
             placeholder="Enter email"
             keyboardType="email-address"
-            value={email}
-            onChangeText={setEmail}
             style={styles.input}
           
           />
@@ -97,43 +94,32 @@ export default function Loginpage() {
           <Text style={styles.label}>Password</Text>
           <TextInput
             placeholder="Enter password"
-            secureTextEntry={!showPassword}
-            value={password}
-            onChangeText={setPassword}
-            style={styles.input}
-          />
-          <TouchableOpacity 
-          style={styles.eyeinput}
-          onPress={()=>setShowPassword (!showPassword)}>
-<Ionicons name={showPassword? "eye-off" : "eye"
-}
-size={24}/>
-          </TouchableOpacity>
+            style={styles.input}/>
+        
         </View>
-
+    
         {/* Forgot Password */}
         <TouchableOpacity>
           <Text style={styles.forgotPassword}>Forgot Password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
            <Link href={("/registrationpage")}>
           <Text style={styles.signup}>Dont have an account? Sign up</Text>
           </Link>
-       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}
-         onPress={handleLogin}>
-         
-        {/* Button */}
-       {/* <Link href={("/(tabs)/Home")}> */}
+       </TouchableOpacity> */}
+      <TouchableOpacity style={styles.button}>
+    
+       <Link href={("/(tabs)/Home")}> 
           <Text style={styles.buttonText}>Sign In</Text>
-        {/* </Link> */}
-        </TouchableOpacity>
-      </View>
+        </Link>
+      </TouchableOpacity>
+      
 
       {/* Footer */}
       <Text style={styles.footer}>
-        Secured by your TechCrush Group 17.
+        Secured By TechCrush Group 17.
       </Text>
+      </View>
       </ScrollView>
     </SafeAreaView>
     </>

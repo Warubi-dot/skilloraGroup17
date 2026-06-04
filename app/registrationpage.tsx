@@ -126,7 +126,7 @@ export default function RegisterScreen() {
 
       {/* Footer */}
             <Text style={styles.footer}>
-              Secured by TechCrush Group 17.
+              Secured By TechCrush Group 17.
             </Text>
     </View>
 

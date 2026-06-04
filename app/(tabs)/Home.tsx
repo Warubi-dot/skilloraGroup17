@@ -9,15 +9,10 @@ import {
 } from "react-native";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "@/context/AuthContext";
-// import { registerForPushNotifications } from "@/utils/notifications/notifications";
 import * as ImagePicker from "expo-image-picker";
-
-// useEffect(() => {
-//   registerForPushNotifications();
-// }, []);
 
 interface Course {
   id: string;
@@ -145,7 +140,7 @@ const changeProfilePicture = async () => {
 
       <View style={styles.learningCard}>
         <TouchableOpacity>
-           <Link href={("/(tabs)/library")}>
+           <Link href={("/module")}>
         <Text style={styles.cardSmallText}>
           CONTINUE LEARNING
         </Text>
@@ -178,7 +173,7 @@ const changeProfilePicture = async () => {
             color="#4F46E5"
           />
           <TouchableOpacity>
-            <Link href={("/(tabs)/library")}>
+            <Link href={("/module")}>
           <Text style={styles.continueText}>
             Continue Learning
           </Text>
