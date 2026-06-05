@@ -204,13 +204,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFFFFF",
     paddingHorizontal: 20,
+    padding:10,
+    width:"90%",
+    alignSelf:"center",
   },
 
   header: {
-    fontSize: 28,
-    fontWeight: "700",
+    fontSize: 24,
+    fontWeight: "500",
     textAlign: "center",
-    marginTop: 60,
+    marginTop: 20,
   },
 
   avatar: {
@@ -218,33 +221,33 @@ const styles = StyleSheet.create({
     height: 140,
     borderRadius: 70,
     alignSelf: "center",
-    marginTop: 20,
+    marginTop: 10,
   },
 
   nameContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 10,
   },
 
   name: {
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: "600",
     marginRight: 10,
   },
 
   role: {
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 18,
     color: "#555",
     marginTop: 5,
   },
 
   sectionTitle: {
-    fontSize: 28,
-    fontWeight: "700",
-    marginTop: 30,
+    fontSize: 25,
+    fontWeight: "500",
+    marginTop: 10,
     marginBottom: 15,
   },
 
@@ -252,6 +255,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
+    padding:10,
+    
   },
 
   card: {
@@ -260,25 +265,26 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     borderColor: "#E5E7EB",
-    paddingVertical: 25,
+    paddingVertical: 10,
     alignItems: "center",
-    marginBottom: 15,
+    marginBottom: 10,
+    padding:10
   },
 
   emoji: {
-    fontSize: 35,
+    fontSize: 25,
   },
 
   number: {
-    fontSize: 32,
+    fontSize: 25,
     fontWeight: "700",
-    marginTop: 10,
+    marginTop: 0,
   },
 
   cardText: {
     textAlign: "center",
     color: "#666",
-    fontSize: 18,
+    fontSize: 14,
     marginTop: 5,
   },
 
@@ -286,18 +292,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    fontSize:18,
+    marginTop:-10,
   },
 
   viewAll: {
     color: "#2563EB",
-    fontSize: 18,
-    fontWeight: "600",
+    fontSize: 15,
+    fontWeight: "500",
   },
 
   badgesRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 20,
+    marginBottom: 0,
   },
 
   badgeItem: {
@@ -306,13 +314,14 @@ const styles = StyleSheet.create({
   },
 
   badgeIcon: {
-    fontSize: 40,
+    fontSize: 25,
   },
 
   badgeText: {
     textAlign: "center",
     marginTop: 10,
     fontWeight: "500",
+    fontSize:12,
   },
 
   menuItem: {
@@ -328,7 +337,7 @@ const styles = StyleSheet.create({
   },
 
   menuText: {
-    fontSize: 18,
+    fontSize: 15,
   },
 
   logoutContainer: {

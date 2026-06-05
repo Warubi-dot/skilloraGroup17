@@ -130,20 +130,48 @@ export default function Module() {
         </TouchableOpacity>
 
       </ScrollView>
+       {/* Bottom Navigation */}
+            <View style={styles.bottomNav}>
+              <TouchableOpacity
+              onPress={()=>{router.push("/Home")}} style={styles.navItem}>
+                <Ionicons name="home-outline" size={24} color="#9CA3AF" />
+                <Text style={styles.navText}>Home</Text>
+              </TouchableOpacity>
+      
+              <TouchableOpacity
+              onPress={()=>{router.push("/library")}} style={styles.navItem}>
+                <Ionicons name="book-outline" size={24} color="#2563EB" />
+                <Text style={styles.activeNavText}>Library</Text>
+              </TouchableOpacity>
+      
+              <TouchableOpacity
+              onPress={()=>{router.push("/awards")}} style={styles.navItem}>
+                <Ionicons name="trophy-outline" size={24} color="#9CA3AF" />
+                <Text style={styles.navText}>Awards</Text>
+              </TouchableOpacity>
+      
+              <TouchableOpacity
+              onPress={()=>{router.push("/profile")}} style={styles.navItem}>
+                <Ionicons name="person-outline" size={24} color="#9CA3AF" />
+                <Text style={styles.navText}>Profile</Text>
+              </TouchableOpacity>
+            </View>
     </SafeAreaView>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  container:{flex:1,backgroundColor:"#fff"},
+  container:{flex:1,backgroundColor:"#fff", width:"90%", alignSelf:"center"},
   header:{
     flexDirection:"row",
     justifyContent:"space-between",
     alignItems:"center",
-    padding:20
+    padding:10,
+    marginTop:40,
+    
   },
-  title:{fontSize:20,fontWeight:"700"},
+  title:{fontSize:18,fontWeight:"700"},
   iconBtn:{
     width:45,
     height:45,
@@ -155,20 +183,21 @@ const styles = StyleSheet.create({
   },
   banner:{
     width:"90%",
-    height:180,
+    height:150,
     alignSelf:"center",
     borderRadius:20
   },
   courseTitle:{
-    fontSize:22,
+    fontSize:16,
     fontWeight:"700",
-    marginTop:20,
+    marginTop:15,
     marginHorizontal:20
   },
   author:{
     marginHorizontal:20,
     color:"#777",
-    marginTop:8
+    marginTop:8,
+    fontSize:12,
   },
   stats:{
     flexDirection:"row",
@@ -177,23 +206,24 @@ const styles = StyleSheet.create({
   },
   progressCard:{
     margin:20,
-    padding:20,
+    padding:10,
     borderRadius:20,
     backgroundColor:"#fff",
-    elevation:2
+    elevation:3,
+    marginTop:0
   },
   row:{
     flexDirection:"row",
     justifyContent:"space-between"
   },
   progressBg:{
-    height:10,
+    height:7,
     backgroundColor:"#eee",
     borderRadius:10,
     marginTop:15
   },
   progressFill:{
-    height:10,
+    height:7,
     backgroundColor:"#18C29C",
     borderRadius:10
   },
@@ -201,19 +231,20 @@ const styles = StyleSheet.create({
     marginHorizontal:20
   },
   sectionTitle:{
-    fontSize:22,
-    fontWeight:"700",
-    marginBottom:15
+    fontSize:18,
+    fontWeight:"500",
+    marginBottom:4
   },
   lessonCard:{
     flexDirection:"row",
     gap:15,
-    padding:20,
+    padding:15,
     borderWidth:1,
-    borderColor:"#eee"
+    borderColor:"#eee",
+    borderRadius: 10,
   },
   lessonTitle:{
-    fontSize:18,
+    fontSize:16,
     fontWeight:"600"
   },
   duration:{
@@ -222,13 +253,38 @@ const styles = StyleSheet.create({
   button:{
     backgroundColor:"#3366FF",
     margin:20,
-    padding:18,
+    padding:15,
     borderRadius:15
   },
   buttonText:{
     color:"#fff",
     textAlign:"center",
-    fontWeight:"700",
+    fontWeight:"500",
     fontSize:18
-  }
+  },
+  bottomNav: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    backgroundColor: "#fff",
+    paddingVertical: 18,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+  },
+  navItem: {
+    alignItems: "center",
+  },
+  navText: {
+    marginTop: 4,
+    color: "#9CA3AF",
+    fontSize: 12,
+  },
+
+  activeNavText: {
+    marginTop: 4,
+    color: "#2563EB",
+    fontSize: 12,
+    fontWeight: "600",
+  },
 });

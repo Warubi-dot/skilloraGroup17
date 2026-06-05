@@ -2,12 +2,14 @@ import { router, Stack, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import {
   ScrollView,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 import { quizData } from "../data/quizData";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function ResultScreen() {
   const { answers } = useLocalSearchParams();
@@ -38,11 +40,11 @@ export default function ResultScreen() {
       <ScrollView
         style={{
           flex: 1,
-          backgroundColor: "#fff",
+          backgroundColor: "#fff", width:"90%", alignSelf:"center", padding:5
         }}
         contentContainerStyle={{
-          padding: 20,
-          paddingBottom: 40,
+          padding: 10,
+          paddingBottom: 20,
         }}
       >
         {/* Header */}
@@ -50,7 +52,7 @@ export default function ResultScreen() {
           style={{
             flexDirection: "row",
             alignItems: "center",
-            marginBottom: 30,
+            marginBottom: 10,
           }}
         >
           <TouchableOpacity
@@ -68,7 +70,7 @@ export default function ResultScreen() {
           >
             <Text
               style={{
-                fontSize: 24,
+                fontSize: 22,
                 fontWeight: "600",
               }}
             >
@@ -78,7 +80,7 @@ export default function ResultScreen() {
 
           <Text
             style={{
-              fontSize: 30,
+              fontSize: 22,
               fontWeight: "700",
             }}
           >
@@ -89,11 +91,11 @@ export default function ResultScreen() {
         {/* Score */}
         <Text
           style={{
-            fontSize: 40,
-            fontWeight: "700",
+            fontSize: 30,
+            fontWeight: "500",
             color: "#335CFF",
             lineHeight: 55,
-            marginBottom: 25,
+            marginBottom: 10,
           }}
         >
           Good Effort! You{"\n"}scored {score}/
@@ -106,13 +108,13 @@ export default function ResultScreen() {
             borderWidth: 1,
             borderColor: "#E5E7EB",
             borderRadius: 25,
-            padding: 18,
+            padding: 10,
           }}
         >
           <Text
             style={{
-              fontSize: 24,
-              fontWeight: "700",
+              fontSize: 20,
+              fontWeight: "500",
             }}
           >
             Share Your Reflection
@@ -122,8 +124,8 @@ export default function ResultScreen() {
             style={{
               color: "#6B7280",
               marginTop: 5,
-              marginBottom: 15,
-              fontSize: 15,
+              marginBottom: 1,
+              fontSize: 12,
             }}
           >
             How will you apply what you
@@ -135,13 +137,13 @@ export default function ResultScreen() {
             value={reflection}
             onChangeText={setReflection}
             maxLength={500}
-            placeholder="I learned that active listening means..."
+            placeholder="Type Here..."
             style={{
               borderWidth: 1,
               borderColor: "#E5E7EB",
               borderRadius: 18,
-              height: 180,
-              padding: 15,
+              height: 150,
+              padding: 10,
               textAlignVertical: "top",
             }}
           />
@@ -151,7 +153,7 @@ export default function ResultScreen() {
               flexDirection: "row",
               justifyContent:
                 "space-between",
-              marginTop: 10,
+              marginTop: 5,
             }}
           >
             <Text
@@ -179,16 +181,16 @@ export default function ResultScreen() {
           }
           style={{
             backgroundColor: "#18C29C",
-            padding: 18,
+            padding: 15,
             borderRadius: 15,
-            marginTop: 20,
+            marginTop: 10,
           }}
         >
           <Text
             style={{
               color: "#fff",
               textAlign: "center",
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: "700",
             }}
           >
@@ -200,16 +202,16 @@ export default function ResultScreen() {
         <View
           style={{
             backgroundColor: "#EEFDF8",
-            padding: 20,
-            borderRadius: 20,
-            marginTop: 25,
+            padding: 10,
+            borderRadius: 10,
+            marginTop: 10,
           }}
         >
           <Text
             style={{
-              fontSize: 22,
-              fontWeight: "700",
-              marginBottom: 20,
+              fontSize: 20,
+              fontWeight: "500",
+              marginBottom: 10,
             }}
           >
             Key Takeaways
@@ -218,7 +220,7 @@ export default function ResultScreen() {
           <Text
             style={{
               marginBottom: 12,
-              fontSize: 16,
+              fontSize: 13,
             }}
           >
             ✅ Active listening builds
@@ -228,7 +230,7 @@ export default function ResultScreen() {
           <Text
             style={{
               marginBottom: 12,
-              fontSize: 16,
+              fontSize: 13,
             }}
           >
             ✅ Non-verbal cues communicate
@@ -237,7 +239,7 @@ export default function ResultScreen() {
 
           <Text
             style={{
-              fontSize: 16,
+              fontSize: 13,
             }}
           >
             ✅ Assertive communication
@@ -252,16 +254,16 @@ export default function ResultScreen() {
           }
           style={{
             backgroundColor: "#335CFF",
-            padding: 20,
+            padding: 15,
             borderRadius: 18,
-            marginTop: 30,
+            marginTop: 10,
           }}
         >
           <Text
             style={{
               color: "#fff",
               textAlign: "center",
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: "700",
             }}
           >
@@ -269,6 +271,61 @@ export default function ResultScreen() {
           </Text>
         </TouchableOpacity>
       </ScrollView>
+       {/* Bottom Navigation */}
+      <View style={styles.bottomNav}>
+        <TouchableOpacity
+        onPress={()=>{router.push("/Home")}} style={styles.navItem}>
+          <Ionicons name="home-outline" size={24} color="#9CA3AF" />
+          <Text style={styles.navText}>Home</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+        onPress={()=>{router.push("/library")}} style={styles.navItem}>
+          <Ionicons name="book-outline" size={24} color="#2563EB" />
+          <Text style={styles.activeNavText}>Library</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+        onPress={()=>{router.push("/awards")}} style={styles.navItem}>
+          <Ionicons name="trophy-outline" size={24} color="#9CA3AF" />
+          <Text style={styles.navText}>Awards</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+        onPress={()=>{router.push("/profile")}} style={styles.navItem}>
+          <Ionicons name="person-outline" size={24} color="#9CA3AF" />
+          <Text style={styles.navText}>Profile</Text>
+        </TouchableOpacity>
+      </View>
     </>
   );
 }
+
+
+const styles = StyleSheet.create({
+   bottomNav: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    backgroundColor: "#fff",
+    paddingVertical: 18,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+  },
+  navItem: {
+    alignItems: "center",
+  },
+  navText: {
+    marginTop: 4,
+    color: "#9CA3AF",
+    fontSize: 12,
+  },
+
+  activeNavText: {
+    marginTop: 4,
+    color: "#2563EB",
+    fontSize: 12,
+    fontWeight: "600",
+  },
+})

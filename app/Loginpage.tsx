@@ -2,8 +2,6 @@ import { Link, Stack, useRouter } from "expo-router";
 
 import React, { useState } from "react";
 import {View,Text,TextInput,TouchableOpacity,StyleSheet,SafeAreaView,Image, ScrollView, Alert,} from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useAuth } from "@/context/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 
 
@@ -11,49 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 
 export default function Loginpage() {
-  // const{setUser}= useAuth();
-  // const [email, setEmail] = useState("");
-  //   const [password, setPassword] = useState("");
   
-    // const handleLogin = async () => {
-    //   try {
-    //     const storedUsers =
-    //       await AsyncStorage.getItem("users");
-  
-    //     const users = storedUsers
-    //       ? JSON.parse(storedUsers)
-    //       : [];
-  
-    //     const user = users.find(
-    //       (u: any) =>
-    //         u.email === email &&
-    //         u.password === password
-    //     );
-  
-    //     if (!user) {
-    //       Alert.alert(
-    //         "Login Failed",
-    //         "Invalid email or password"
-    //       );
-    //       return;
-    //     }
-  
-    //     await AsyncStorage.setItem(
-    //       "currentUser",
-    //       JSON.stringify(user)
-    //     );
-  
-    //     Alert.alert(
-    //       "Success",
-    //       `Welcome ${user.name}`
-    //     );
-  
-    //     router.replace("/Home");
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // };
-   
   return (
    <>
     <Stack.Screen
@@ -102,11 +58,7 @@ export default function Loginpage() {
         <TouchableOpacity>
           <Text style={styles.forgotPassword}>Forgot Password?</Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity>
-           <Link href={("/registrationpage")}>
-          <Text style={styles.signup}>Dont have an account? Sign up</Text>
-          </Link>
-       </TouchableOpacity> */}
+       
       <TouchableOpacity style={styles.button}>
     
        <Link href={("/(tabs)/Home")}> 
@@ -142,8 +94,8 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
     resizeMode: "contain",
   },
 
@@ -166,7 +118,7 @@ const styles = StyleSheet.create({
   },
 
   subtitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#A1A1AA",
     marginBottom: 40,
   },
@@ -196,7 +148,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     color: "#2563EB",
     fontSize: 15,
-    marginBottom: 20,
+    marginBottom: 40,
     fontWeight: "500",
   },
  signup: {
@@ -208,7 +160,7 @@ const styles = StyleSheet.create({
  },
   button: {
     backgroundColor: "#2563EB",
-    height: 58,
+    height: 50,
     borderRadius: 14,
     justifyContent: "center",
     alignItems: "center",

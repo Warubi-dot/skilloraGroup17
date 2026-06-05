@@ -76,6 +76,32 @@ export default function ModuleCompleted() {
           </TouchableOpacity>
         </View>
       </View>
+       {/* Bottom Navigation */}
+            <View style={styles.bottomNav}>
+              <TouchableOpacity
+              onPress={()=>{router.push("/Home")}} style={styles.navItem}>
+                <Ionicons name="home-outline" size={24} color="#9CA3AF" />
+                <Text style={styles.navText}>Home</Text>
+              </TouchableOpacity>
+      
+              <TouchableOpacity
+              onPress={()=>{router.push("/library")}} style={styles.navItem}>
+                <Ionicons name="book-outline" size={24} color="#2563EB" />
+                <Text style={styles.activeNavText}>Library</Text>
+              </TouchableOpacity>
+      
+              <TouchableOpacity
+              onPress={()=>{router.push("/awards")}} style={styles.navItem}>
+                <Ionicons name="trophy-outline" size={24} color="#9CA3AF" />
+                <Text style={styles.navText}>Awards</Text>
+              </TouchableOpacity>
+      
+              <TouchableOpacity
+              onPress={()=>{router.push("/profile")}} style={styles.navItem}>
+                <Ionicons name="person-outline" size={24} color="#9CA3AF" />
+                <Text style={styles.navText}>Profile</Text>
+              </TouchableOpacity>
+            </View>
     </SafeAreaView>
     </>
   );
@@ -172,5 +198,30 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "700",
     fontSize: 16,
+  },
+  bottomNav: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    backgroundColor: "#fff",
+    paddingVertical: 18,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+  },
+  navItem: {
+    alignItems: "center",
+  },
+  navText: {
+    marginTop: 4,
+    color: "#9CA3AF",
+    fontSize: 12,
+  },
+
+  activeNavText: {
+    marginTop: 4,
+    color: "#2563EB",
+    fontSize: 12,
+    fontWeight: "600",
   },
 });

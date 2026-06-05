@@ -256,7 +256,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    padding: 20,
+    padding: 30,
+    width:"90%",
+    alignSelf:"center"
   },
 
   header: {
@@ -287,7 +289,7 @@ const styles = StyleSheet.create({
 
   tabText: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: "500",
   },
 
   activeTabText: {
@@ -298,7 +300,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 20,
     padding: 10,
-    marginBottom: 20,
+    marginBottom: 10,
     borderWidth: 1,
     borderColor: "#eee",
   },
@@ -312,7 +314,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 18,
-    backgroundColor: "#4F46E5",
+    backgroundColor: "#4047a1",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -323,8 +325,8 @@ const styles = StyleSheet.create({
   },
 
   courseTitle: {
-    fontSize: 20,
-    fontWeight: "700",
+    fontSize: 18,
+    fontWeight: "500",
     marginTop: 15,
   },
 
@@ -345,11 +347,12 @@ const styles = StyleSheet.create({
   },
 
   value: {
-    fontWeight: "700",
+    fontWeight: "500",
     marginTop: 4,
   },
 
   line: {
+    width:"60%",
     height: 3,
     backgroundColor: "#4F46E5",
     marginTop: 25,
@@ -359,8 +362,9 @@ const styles = StyleSheet.create({
   certified: {
     textAlign: "right",
     color: "#4F46E5",
-    marginTop: 10,
-    fontWeight: "700",
+    marginTop: -8,
+    fontWeight: "500",
+    fontSize:10,
   },
 
   badgeGrid: {
@@ -371,22 +375,22 @@ const styles = StyleSheet.create({
 
   badgeCard: {
     width: "48%",
-    height: 180,
+    height: 150,
     backgroundColor: "#fff",
     borderWidth: 1,
     borderColor: "#eee",
     borderRadius: 20,
-    padding: 20,
+    padding: 10,
     alignItems: "center",
     marginBottom: 15,
   },
 
   emoji: {
-    fontSize: 25,
+    fontSize: 20,
   },
 
   badgeTitle: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: "700",
     marginTop: 10,
     textAlign: "center",

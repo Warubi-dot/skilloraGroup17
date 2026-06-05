@@ -10,8 +10,6 @@ import {
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, router } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useAuth } from "@/context/AuthContext";
 import * as ImagePicker from "expo-image-picker";
 
 interface Course {
@@ -49,27 +47,9 @@ const courses: Course[] = [
   },
 ];
 
-export default function Home() {
-  const {user} = useAuth();
-  const [profileImage, setProfileImage] = useState(
-  "https://randomuser.me/api/portraits/women/44.jpg");
-
-  useEffect(() => {
-  const loadImage = async () => {
-    const savedImage = await AsyncStorage.getItem(
-      "profileImage"
-    );
-
-    if (savedImage) {
-      setProfileImage(savedImage);
-    }
-  };
-
-  loadImage();
-}, []);
-
-
-const changeProfilePicture = async () => {
+export default function HomeScreen() {
+  const [profileImage, setProfileImage] = useState( "https://randomuser.me/api/portraits/women/44.jpg");
+ const changeProfilePicture = async () => {
   const result = await ImagePicker.launchImageLibraryAsync({
     mediaTypes: ["images"],
     allowsEditing: true,
@@ -82,38 +62,19 @@ const changeProfilePicture = async () => {
 
   setProfileImage(uri);
 
-  await AsyncStorage.setItem(
-    "profileImage_${user.email}",
-    uri
-  );
 }
 };
- const [currentUser, setCurrentUser] = useState<any>(null);
-
-  useEffect(() => {
-    getCurrentUser();
-  }, []);
-
-  const getCurrentUser = async () => {
-    const storedUser =
-      await AsyncStorage.getItem("currentUser");
-
-    if (storedUser) {
-      setCurrentUser(JSON.parse(storedUser));
-    }
-  };
+ 
 
   return (
-    // <SafeAreaView>
+    <SafeAreaView style={styles.container}>
     <ScrollView
-      style={styles.container}
-      showsVerticalScrollIndicator={true}
-
+      showsVerticalScrollIndicator={false}
     >
       <View style={styles.header}>
         <View>
           <Text style={styles.logo}>Skillora</Text>
-          <Text style={styles.greeting}>Hello, {currentUser?.name}</Text>
+          <Text style={styles.greeting}>Hello, GenesisWorlld</Text>
           <TouchableOpacity>
             <Link href={("/(tabs)/library")}>
           <Text style={styles.subtitle}>
@@ -182,13 +143,56 @@ const changeProfilePicture = async () => {
         </TouchableOpacity>
       </View>
 
+      
+
+      <Text style={styles.learningTitle}>
+        Your Learning
+      </Text>
+
+      <View style={styles.statsContainer}>
+        <View style={styles.statCard}>
+          <Feather
+            name="check"
+            size={22}
+            color="#10B981"
+          />
+          <Text style={styles.statLabel}>
+            Completed
+          </Text>
+          <Text style={styles.statValue}>12 Courses</Text>
+        </View>
+
+        <View style={styles.statCard}>
+          <Ionicons
+            name="flame-outline"
+            size={22}
+            color="#F59E0B"
+          />
+          <Text style={styles.statLabel}>
+            Streak
+          </Text>
+          <Text style={styles.statValue}>12 Courses</Text>
+        </View>
+
+        <View style={styles.statCard}>
+          <Ionicons
+            name="triangle-outline"
+            size={22}
+            color="#EF4444"
+          />
+          <Text style={styles.statLabel}>
+            Points
+          </Text>
+          <Text style={styles.statValue}>120 this month</Text>
+        </View>
+      </View>
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>
           Recommended for you
         </Text>
         <Text style={styles.seeAll}>See all</Text>
       </View>
-
+<View>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -223,53 +227,9 @@ const changeProfilePicture = async () => {
           </View>
         ))}
       </ScrollView>
-
-      <Text style={styles.learningTitle}>
-        Your Learning
-      </Text>
-
-      <View style={styles.statsContainer}>
-        <View style={styles.statCard}>
-          <Feather
-            name="check"
-            size={22}
-            color="#10B981"
-          />
-          <Text style={styles.statLabel}>
-            Completed
-          </Text>
-          <Text style={styles.statValue}>12</Text>
-          <Text>courses</Text>
-        </View>
-
-        <View style={styles.statCard}>
-          <Ionicons
-            name="flame-outline"
-            size={22}
-            color="#F59E0B"
-          />
-          <Text style={styles.statLabel}>
-            Streak
-          </Text>
-          <Text style={styles.statValue}>4h</Text>
-          <Text>this week</Text>
-        </View>
-
-        <View style={styles.statCard}>
-          <Ionicons
-            name="triangle-outline"
-            size={22}
-            color="#EF4444"
-          />
-          <Text style={styles.statLabel}>
-            Points
-          </Text>
-          <Text style={styles.statValue}>120</Text>
-          <Text>this month</Text>
-        </View>
       </View>
     </ScrollView>
-    // {/* </SafeAreaView> */}
+    </SafeAreaView>
   );
 }
 
@@ -277,29 +237,33 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    padding: 20,
+    padding: 10,
+    width:"95%",
+    height:200,
+    alignSelf: "center"
+    
   },
 
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 40,
+    marginTop: 0
   },
 
   logo: {
-    fontSize: 32,
-    fontWeight: "700",
+    fontSize: 24,
+    fontWeight: "500",
   },
 
   greeting: {
-    fontSize: 20,
-    fontWeight: "600",
+    fontSize: 16,
+    fontWeight: "500",
     marginTop: 10,
   },
 
   subtitle: {
     color: "#6B7280",
-    marginTop: 5,
+    marginTop: 10,
   },
 
   headerRight: {
@@ -309,46 +273,52 @@ const styles = StyleSheet.create({
   },
 
   bell: {
-    padding: 10,
+    padding: 6,
     borderWidth: 1,
     borderColor: "#E5E7EB",
-    borderRadius: 50,
+    borderRadius: 20,
+    marginTop:-40,
+    height: 35,
+    width:35,
+    
+    
   },
 
   avatar: {
-    width: 40,
-    height: 40,
+    width: 35,
+    height: 35,
     borderRadius: 22.5,
+    marginTop:-40,
   },
 
   learningCard: {
-    marginTop: 25,
+    marginTop: 15,
     backgroundColor: "#1E40AF",
     borderRadius: 25,
-    padding: 20,
+    padding: 13,
   },
 
   cardSmallText: {
     color: "#D1D5DB",
-    letterSpacing: 2,
+    letterSpacing: 1,
   },
 
   courseTitle: {
     color: "#fff",
-    fontSize: 24,
-    fontWeight: "700",
-    marginTop: 10,
+    fontSize: 14,
+    fontWeight: "500",
+    marginTop: 5,
   },
 
   courseInfo: {
     color: "#D1D5DB",
-    marginTop: 5,
+    marginTop: 4,
   },
 
   progressRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 20,
+    marginTop: 10,
   },
 
   progressText: {
@@ -356,7 +326,7 @@ const styles = StyleSheet.create({
   },
 
   progressBar: {
-    height: 8,
+    height: 5,
     backgroundColor: "#4B5563",
     borderRadius: 10,
     marginTop: 10,
@@ -364,7 +334,7 @@ const styles = StyleSheet.create({
 
   progressFill: {
     width: "68%",
-    height: 8,
+    height: 5,
     backgroundColor: "#2DD4BF",
     borderRadius: 10,
   },
@@ -372,7 +342,7 @@ const styles = StyleSheet.create({
   continueBtn: {
     backgroundColor: "#fff",
     marginTop: 20,
-    padding: 15,
+    padding: 10,
     borderRadius: 18,
     flexDirection: "row",
     justifyContent: "center",
@@ -381,44 +351,50 @@ const styles = StyleSheet.create({
 
   continueText: {
     marginLeft: 8,
-    fontWeight: "600",
+    fontWeight: "500",
     color: "#4F46E5",
   },
 
   sectionHeader: {
-    marginTop: 25,
+    marginTop: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom:20,
   },
 
   sectionTitle: {
     fontSize: 20,
-    fontWeight: "700",
+    fontWeight: "500",
+    marginTop:0,
   },
 
   seeAll: {
     color: "#2563EB",
+    marginTop:0,
   },
 
   courseCard: {
-    width: 220,
-    marginTop: 15,
+    width: 120,
+    height: 140,
+    marginTop: 0,
     marginRight: 15,
+    padding:-10,
+    overflow:"hidden",
     borderRadius: 20,
-    overflow: "hidden",
+   
     borderWidth: 1,
     borderColor: "#E5E7EB",
   },
 
   courseImage: {
     width: "100%",
-    height: 120,
+    height: 60,
   },
 
   courseName: {
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: 10,
+    fontWeight: "500",
   },
 
   author: {
@@ -429,7 +405,7 @@ const styles = StyleSheet.create({
   ratingRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 8,
+    marginTop: 0,
   },
 
   rating: {
@@ -438,15 +414,15 @@ const styles = StyleSheet.create({
 
   learningTitle: {
     fontSize: 20,
-    fontWeight: "700",
-    marginTop: 25,
+    fontWeight: "500",
+    marginTop: 5,
   },
 
   statsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 15,
-    marginBottom: 40,
+    marginBottom: 10,
   },
 
   statCard: {
@@ -454,17 +430,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E5E7EB",
     borderRadius: 16,
-    padding: 12,
+    padding: 8,
+    height:110,
+    
+    
   },
 
   statLabel: {
     color: "#6B7280",
-    marginTop: 8,
+    marginTop: 6,
   },
 
   statValue: {
-    fontSize: 26,
-    fontWeight: "700",
-    marginTop: 10,
+    fontSize: 14,
+    fontWeight: "500",
+    marginTop: 3,
   },
 });

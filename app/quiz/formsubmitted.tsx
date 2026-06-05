@@ -7,7 +7,6 @@ import {
 } from "react-native";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { Stack, useRouter } from "expo-router";
-import { Route } from "expo-router/build/Route";
 
 export default function FormSubmitted() {
   const router = useRouter();
@@ -45,7 +44,9 @@ export default function FormSubmitted() {
             <Text style={styles.awardText}>Check Award</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.lessonButton}>
+          <TouchableOpacity
+          onPress={()=>{router.push("/library")}}
+          style={styles.lessonButton}>
             <Text style={styles.lessonText}>Next Lesson</Text>
             <Feather
               name="chevron-right"
@@ -65,17 +66,20 @@ export default function FormSubmitted() {
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.navItem}>
+        <TouchableOpacity
+        onPress={()=>{router.push("/library")}} style={styles.navItem}>
           <Ionicons name="book-outline" size={24} color="#2563EB" />
           <Text style={styles.activeNavText}>Library</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.navItem}>
+        <TouchableOpacity
+        onPress={()=>{router.push("/awards")}} style={styles.navItem}>
           <Ionicons name="trophy-outline" size={24} color="#9CA3AF" />
           <Text style={styles.navText}>Awards</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.navItem}>
+        <TouchableOpacity
+        onPress={()=>{router.push("/profile")}} style={styles.navItem}>
           <Ionicons name="person-outline" size={24} color="#9CA3AF" />
           <Text style={styles.navText}>Profile</Text>
         </TouchableOpacity>

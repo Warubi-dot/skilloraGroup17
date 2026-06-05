@@ -1,4 +1,4 @@
-import { router, Stack } from "expo-router";
+import { router, Stack, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
     SafeAreaView,
@@ -10,6 +10,7 @@ import {
     View,
 } from "react-native";
 import { quizData } from "../data/quizData";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function QuizScreen() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -43,7 +44,7 @@ export default function QuizScreen() {
       },
     });
   };
-
+const router = useRouter();
   return (
        <>
 <Stack.Screen
@@ -103,8 +104,35 @@ export default function QuizScreen() {
             </Text>
           </TouchableOpacity>
         )}
+       
       </View>
       </ScrollView>
+       {/* Bottom Navigation */}
+      <View style={styles.bottomNav}>
+        <TouchableOpacity
+        onPress={()=>{router.push("/Home")}} style={styles.navItem}>
+          <Ionicons name="home-outline" size={24} color="#9CA3AF" />
+          <Text style={styles.navText}>Home</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+        onPress={()=>{router.push("/library")}} style={styles.navItem}>
+          <Ionicons name="book-outline" size={24} color="#2563EB" />
+          <Text style={styles.activeNavText}>Library</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+        onPress={()=>{router.push("/awards")}} style={styles.navItem}>
+          <Ionicons name="trophy-outline" size={24} color="#9CA3AF" />
+          <Text style={styles.navText}>Awards</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+        onPress={()=>{router.push("/profile")}} style={styles.navItem}>
+          <Ionicons name="person-outline" size={24} color="#9CA3AF" />
+          <Text style={styles.navText}>Profile</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
     </>
   );
@@ -114,22 +142,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    padding: 20,
+    padding: 30,
   
   },
 
   title: {
-    fontSize: 22,
-    fontWeight: "700",
-    marginBottom: 80,
+    fontSize: 20,
+    fontWeight: "600",
+    marginBottom: 30,
     textAlign: "center",
   },
 
   questionCard: {
-    backgroundColor: "#335CFF",
+    backgroundColor: "#3f42f3",
     borderRadius: 20,
-    padding: 20,
-    marginBottom: 40,
+    padding: 10,
+    marginBottom: 20,
+    height:120,
   },
 
   questionCount: {
@@ -140,15 +169,15 @@ const styles = StyleSheet.create({
 
   question: {
     color: "#fff",
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: "700",
   },
 
   option: {
     backgroundColor: "#EEF2F7",
-    padding: 20,
+    padding: 15,
     borderRadius: 15,
-    marginBottom: 15,
+    marginBottom: 10,
   },
 
   selectedOption: {
@@ -157,7 +186,7 @@ const styles = StyleSheet.create({
   },
 
   optionText: {
-    fontSize: 16,
+    fontSize: 14,
   },
 
   footer: {
@@ -172,6 +201,7 @@ const styles = StyleSheet.create({
     padding: 18,
     borderRadius: 15,
     alignItems: "center",
+    marginTop:90,
   },
 
   nextButton: {
@@ -180,6 +210,7 @@ const styles = StyleSheet.create({
     padding: 18,
     borderRadius: 15,
     alignItems: "center",
+     marginTop:90,
   },
 
   submitButton: {
@@ -188,10 +219,40 @@ const styles = StyleSheet.create({
     padding: 18,
     borderRadius: 15,
     alignItems: "center",
+     marginTop:90, 
   },
 
   buttonText: {
     color: "#fff",
     fontWeight: "700",
+
+  },
+   bottomNav: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    backgroundColor: "#fff",
+    paddingVertical: 10,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    marginBottom:20
+  },
+
+  navItem: {
+    alignItems: "center",
+  },
+
+  navText: {
+    marginTop: 4,
+    color: "#9CA3AF",
+    fontSize: 12,
+  },
+
+  activeNavText: {
+    marginTop: 4,
+    color: "#2563EB",
+    fontSize: 12,
+    fontWeight: "600",
   },
 });
