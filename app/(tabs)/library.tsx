@@ -13,6 +13,22 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import { router } from "expo-router";
+import * as Notifications from "expo-notifications";
+
+const sendTestNotification = async () => {
+  console.log("Notification pressed");
+
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "Skillora",
+      body: "Continue learning On Skillora 🚀",
+    },
+    trigger: {
+      type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+      seconds:5,
+    }
+  });
+};
 
 type TabType = "progress" | "completed" | "saved";
 
@@ -69,7 +85,10 @@ export default function LibraryScreen() {
       case "progress":
         return (
           <TouchableOpacity
-          onPress={()=>{router.push("/module")}}>
+          onPress={()=>{
+            sendTestNotification();
+            router.push("/module")}}>
+            
           <FlatList
             data={inProgressData}
             keyExtractor={(item) => item.id}
