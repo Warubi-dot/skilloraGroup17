@@ -11,6 +11,9 @@ import { Stack, useRouter } from "expo-router";
 export default function FormSubmitted() {
   const router = useRouter();
 
+
+  
+
   return (
     <>
       <Stack.Screen
@@ -47,7 +50,7 @@ export default function FormSubmitted() {
           <TouchableOpacity
           onPress={()=>{router.push("/library")}}
           style={styles.lessonButton}>
-            <Text style={styles.lessonText}>Next Lesson</Text>
+            <Text style={styles.lessonText}>Next Module</Text>
             <Feather
               name="chevron-right"
               size={18}

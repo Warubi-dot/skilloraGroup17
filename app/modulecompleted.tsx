@@ -50,11 +50,11 @@ export default function ModuleCompleted() {
           <TouchableOpacity
             style={styles.lessonBtn}
             onPress={() =>
-              router.push("/moduleplayer")
+              router.push("/module")
             }
           >
             <Text style={styles.lessonText}>
-              Next Lesson
+              Next Module
             </Text>
           </TouchableOpacity>
 

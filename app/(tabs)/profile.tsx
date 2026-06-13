@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import {
   View,
   Text,
@@ -15,11 +15,37 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+
+
+
+
 
 export default function ProfileScreen() {
   const [profileImage, setProfileImage] = useState(
     "https://randomuser.me/api/portraits/women/44.jpg"
   );
+  const [user, setUser] = useState<any>(null);
+  useEffect(() => {
+  loadUser();
+}, []);
+
+const loadUser = async () => {
+  try {
+    const userData = await AsyncStorage.getItem("user");
+
+    if (userData) {
+      setUser(JSON.parse(userData));
+      console.log(
+        "USER:",
+        JSON.parse(userData)
+      );
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   const pickImage = async () => {
     const permission =
@@ -53,21 +79,37 @@ export default function ProfileScreen() {
       <Text style={styles.header}>Profile</Text>
 
       {/* Profile Image */}
-      <Image
-        source={{ uri: profileImage }}
-        style={styles.avatar}
-      />
+      <View
+  style={[
+    styles.avatar,
+    {
+      backgroundColor: "#2563EB",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  ]}
+>
+  <Text
+    style={{
+      color: "#fff",
+      fontSize: 45,
+      fontWeight: "700",
+    }}
+  >
+    {user?.name?.charAt(0) || "U"}
+  </Text>
+</View>
 
       {/* Name + Edit */}
       <View style={styles.nameContainer}>
-        <Text style={styles.name}>GenesisWorlld</Text>
+        <Text style={styles.name}>{user?.name || "user"}</Text>
 
         <TouchableOpacity onPress={pickImage}>
           <Feather name="edit-2" size={22} color="#000" />
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.role}>Mobile Developer</Text>
+      <Text style={styles.role}>{user?.email || "No Email"}</Text>
 
       {/* Learning Overview */}
       <Text style={styles.sectionTitle}>
@@ -153,8 +195,14 @@ export default function ProfileScreen() {
       <MenuItem title="Language Preferences" />
 
       <TouchableOpacity
-      onPress={()=>{router.push("/Loginpage")}}
-      style={styles.logoutContainer}>
+  onPress={async () => {
+    await AsyncStorage.removeItem("token");
+    await AsyncStorage.removeItem("user");
+
+    router.replace("/Loginpage");
+  }}
+  style={styles.logoutContainer}
+>
         <MaterialIcons
           name="logout"
           size={22}

@@ -1,30 +1,63 @@
-import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text,ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import { getModule } from "../app/Services/moduleStore";
+import { getModuleWithLessons } from "../app/Services/modulesApi";
+import { router, Stack } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { Link, router, Stack } from "expo-router";
+import { setLesson } from "../app/Services/lessonStore";
 
-export default function Module() {
-  return (
-       <>
-<Stack.Screen
-    options={{headerShown: false}}/>
+
+export default function ModuleScreen() {
+  const module = getModule();
+  console.log(module);
+  const [lessons, setLessons] = useState<any[]>([]);
+
+  useEffect(() => {
+  fetchLessons();
+}, []);
+
+const fetchLessons = async () => {
+  try {
+    console.log("MODULE:", module);
+    console.log("MODULE ID:", module?._id);
+
+    if (!module?._id) {
+      return;
+    }
+
+    const response = await getModuleWithLessons(
+      module._id
+    );
+setLessons(response.data.moduleLessons);
+   console.log(
+  "MODULE LESSONS:",
+  JSON.stringify(
+    response.data.moduleLessons,
+    null,
+    2
+  )
+);
+  } catch (error) {
+    console.log(error);
+  }
+};
+console.log("LESSONS:", lessons)
+ return (
+
+  <>
+    <Stack.Screen options={{ headerShown: false }} />
 
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
 
+        {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity style={styles.iconBtn}>
-            <Link href={("/(tabs)/library")}>
+          <TouchableOpacity
+            style={styles.iconBtn}
+            onPress={() => router.back()}
+          >
             <Ionicons name="chevron-back" size={24} />
-            </Link>
           </TouchableOpacity>
 
           <Text style={styles.title}>
@@ -39,127 +72,188 @@ export default function Module() {
           </TouchableOpacity>
         </View>
 
-        <Image
-          source={{
-            uri: "https://images.unsplash.com/photo-1558655146-d09347e92766",
-          }}
-          style={styles.banner}
-        />
+        {/* Banner */}
+        <View>
 
+          <View style={styles.playOverlay}>
+            <Ionicons
+              name="play"
+              size={40}
+              color="#3366FF"
+            />
+          </View>
+        </View>
+
+        {/* Module Details */}
         <Text style={styles.courseTitle}>
-          Effective Communication II
+          {module?.title}
         </Text>
 
         <Text style={styles.author}>
-          By Alex Parker · Lead Strategist
+          {module?.description}
         </Text>
 
         <View style={styles.stats}>
           <Text>⭐ 4.9</Text>
           <Text>👥 12,480</Text>
-          <Text>⏱ 18 lessons</Text>
+          <Text>⏱ {module?.duration || 0} mins</Text>
         </View>
 
+        {/* Progress */}
         <View style={styles.progressCard}>
           <View style={styles.row}>
             <Text>Your Progress</Text>
-            <Text>8 / 12 lessons</Text>
+
+            <Text>
+              {lessons.length}/{lessons.length} lessons
+            </Text>
           </View>
 
           <View style={styles.progressBg}>
             <View
               style={[
                 styles.progressFill,
-                { width: "70%" },
+                { width: "100%" },
               ]}
             />
           </View>
         </View>
 
+        {/* Course Content */}
         <View style={styles.lessonContainer}>
-          <Text style={styles.sectionTitle}>
-            Course Content
-          </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginBottom: 15,
+            }}
+          >
+            <Text style={styles.sectionTitle}>
+              Course Content
+            </Text>
 
-          <View style={styles.lessonCard}>
-            <Ionicons
-              name="checkmark-circle"
-              size={28}
-              color="#18C29C"
-            />
-
-            <View>
-              <Text style={styles.lessonTitle}>
-                Intro to Communication
-              </Text>
-
-              <Text style={styles.duration}>
-                10 min
-              </Text>
-            </View>
+            <Text
+              style={{
+                color: "#6B7280",
+              }}
+            >
+              {lessons.length} lessons
+            </Text>
           </View>
 
-          <View style={styles.lessonCard}>
-            <Ionicons
-              name="checkmark-circle"
-              size={28}
-              color="#18C29C"
-            />
+          {lessons.map((lesson, index) => (
+            <TouchableOpacity
+              key={lesson._id}
+              style={styles.lessonCard}
+              onPress={() => {
+              setLesson(
+                lesson,
+                lessons,
+                index
+              );
 
-            <View>
-              <Text style={styles.lessonTitle}>
-                How to Speak
-              </Text>
+              router.push("/moduleplayer");
+            }}
+            >
+              <Ionicons
+                name="checkmark-circle"
+                size={32}
+                color="#18C29C"
+              />
 
-              <Text style={styles.duration}>
-                10 min
-              </Text>
-            </View>
-          </View>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.lessonTitle}>
+                  {lesson.title}
+                </Text>
+
+                <Text style={styles.duration}>
+                  {lesson.duration} min
+                </Text>
+              </View>
+            </TouchableOpacity>
+          ))}
         </View>
 
+        {/* Continue Learning */}
         <TouchableOpacity
           style={styles.button}
           onPress={() =>
             router.push("/moduleplayer")
           }
         >
+        
+
           <Text style={styles.buttonText}>
             Continue Learning
           </Text>
         </TouchableOpacity>
 
       </ScrollView>
-       {/* Bottom Navigation */}
-            <View style={styles.bottomNav}>
-              <TouchableOpacity
-              onPress={()=>{router.push("/Home")}} style={styles.navItem}>
-                <Ionicons name="home-outline" size={24} color="#9CA3AF" />
-                <Text style={styles.navText}>Home</Text>
-              </TouchableOpacity>
-      
-              <TouchableOpacity
-              onPress={()=>{router.push("/library")}} style={styles.navItem}>
-                <Ionicons name="book-outline" size={24} color="#2563EB" />
-                <Text style={styles.activeNavText}>Library</Text>
-              </TouchableOpacity>
-      
-              <TouchableOpacity
-              onPress={()=>{router.push("/awards")}} style={styles.navItem}>
-                <Ionicons name="trophy-outline" size={24} color="#9CA3AF" />
-                <Text style={styles.navText}>Awards</Text>
-              </TouchableOpacity>
-      
-              <TouchableOpacity
-              onPress={()=>{router.push("/profile")}} style={styles.navItem}>
-                <Ionicons name="person-outline" size={24} color="#9CA3AF" />
-                <Text style={styles.navText}>Profile</Text>
-              </TouchableOpacity>
-            </View>
+
+      {/* Bottom Nav */}
+      <View style={styles.bottomNav}>
+        <TouchableOpacity
+          onPress={() => router.push("/Home")}
+          style={styles.navItem}
+        >
+          <Ionicons
+            name="home-outline"
+            size={24}
+            color="#9CA3AF"
+          />
+          <Text style={styles.navText}>
+            Home
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => router.push("/library")}
+          style={styles.navItem}
+        >
+          <Ionicons
+            name="book-outline"
+            size={24}
+            color="#2563EB"
+          />
+          <Text style={styles.activeNavText}>
+            Library
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => router.push("/awards")}
+          style={styles.navItem}
+        >
+          <Ionicons
+            name="trophy-outline"
+            size={24}
+            color="#9CA3AF"
+          />
+          <Text style={styles.navText}>
+            Awards
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => router.push("/profile")}
+          style={styles.navItem}
+        >
+          <Ionicons
+            name="person-outline"
+            size={24}
+            color="#9CA3AF"
+          />
+          <Text style={styles.navText}>
+            Profile
+          </Text>
+        </TouchableOpacity>
+      </View>
+
     </SafeAreaView>
-    </>
-  );
+  </>
+);
 }
+
 
 const styles = StyleSheet.create({
   container:{flex:1,backgroundColor:"#fff", width:"90%", alignSelf:"center"},
@@ -170,6 +264,31 @@ const styles = StyleSheet.create({
     padding:10,
     marginTop:40,
     
+  },
+  bottomNav: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    backgroundColor: "#fff",
+    paddingVertical: 18,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+  },
+  navItem: {
+    alignItems: "center",
+  },
+  navText: {
+    marginTop: 4,
+    color: "#9CA3AF",
+    fontSize: 12,
+  },
+
+  activeNavText: {
+    marginTop: 4,
+    color: "#2563EB",
+    fontSize: 12,
+    fontWeight: "600",
   },
   title:{fontSize:18,fontWeight:"700"},
   iconBtn:{
@@ -250,41 +369,32 @@ const styles = StyleSheet.create({
   duration:{
     color:"#777"
   },
-  button:{
-    backgroundColor:"#3366FF",
-    margin:20,
-    padding:15,
-    borderRadius:15
-  },
-  buttonText:{
-    color:"#fff",
-    textAlign:"center",
-    fontWeight:"500",
-    fontSize:18
-  },
-  bottomNav: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    backgroundColor: "#fff",
-    paddingVertical: 18,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    borderWidth: 1,
-    borderColor: "#E5E7EB",
-  },
-  navItem: {
-    alignItems: "center",
-  },
-  navText: {
-    marginTop: 4,
-    color: "#9CA3AF",
-    fontSize: 12,
-  },
+  playOverlay: {
+  position: "absolute",
+  top: "40%",
+  left: "45%",
+  backgroundColor: "rgba(255,255,255,0.9)",
+  width: 70,
+  height: 70,
+  borderRadius: 35,
+  justifyContent: "center",
+  alignItems: "center",
+},
 
-  activeNavText: {
-    marginTop: 4,
-    color: "#2563EB",
-    fontSize: 12,
-    fontWeight: "600",
-  },
-});
+button: {
+  backgroundColor: "#3366FF",
+  margin: 20,
+  padding: 16,
+  borderRadius: 16,
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: 8,
+},
+
+buttonText: {
+  color: "#fff",
+  fontSize: 18,
+  fontWeight: "600",
+},
+})

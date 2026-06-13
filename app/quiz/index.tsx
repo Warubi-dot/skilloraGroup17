@@ -1,4 +1,4 @@
-import { router, Stack, useRouter } from "expo-router";
+import {Stack, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
     SafeAreaView,
@@ -37,13 +37,22 @@ export default function QuizScreen() {
   };
 
   const submitQuiz = () => {
-    router.push({
-      pathname: "/quiz/review",
-      params: {
-        answers: JSON.stringify(answers),
-      },
-    });
-  };
+  let score = 0;
+
+  quizData.forEach((question, index) => {
+    if (answers[index] === question.correctAnswer) {
+      score++;
+    }
+  });
+
+  router.push({
+    pathname: "/quiz/review",
+    params: {
+      answers: JSON.stringify(answers),
+      score: String(score),
+    },
+  });
+};
 const router = useRouter();
   return (
        <>
@@ -54,6 +63,11 @@ const router = useRouter();
       <Text style={styles.title}>Quiz</Text>
 
       <View style={styles.questionCard}>
+        <View style={styles.questionBadge}>
+  <Text style={styles.questionBadgeText}>
+    {currentQuestion + 1}
+  </Text>
+</View>
         <Text style={styles.questionCount}>
           QUESTION {currentQuestion + 1} OF {quizData.length}
         </Text>
@@ -62,6 +76,20 @@ const router = useRouter();
           {question.question}
         </Text>
       </View>
+      <View style={styles.progressContainer}>
+  <View
+    style={[
+      styles.progressFillBar,
+      {
+        width: `${
+          ((currentQuestion + 1) /
+            quizData.length) *
+          100
+        }%`,
+      },
+    ]}
+  />
+</View>
 
       {question.options.map((option, index) => (
         <TouchableOpacity
@@ -95,10 +123,18 @@ const router = useRouter();
             </Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity
-            style={styles.nextButton}
-            onPress={nextQuestion}
-          >
+         <TouchableOpacity
+              disabled={
+                answers[currentQuestion] === undefined
+              }
+              style={[
+                styles.nextButton,
+                answers[currentQuestion] === undefined && {
+                  opacity: 0.5,
+                },
+              ]}
+              onPress={nextQuestion}
+            >
             <Text style={styles.buttonText}>
               Next
             </Text>
@@ -142,23 +178,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    padding: 30,
+    padding: 20,
+  
   
   },
 
   title: {
     fontSize: 20,
     fontWeight: "600",
-    marginBottom: 30,
+    marginBottom: 40,
     textAlign: "center",
   },
 
   questionCard: {
     backgroundColor: "#3f42f3",
     borderRadius: 20,
-    padding: 10,
-    marginBottom: 20,
-    height:120,
+    padding: 5,
+    marginBottom: 25,
+    height:150,
   },
 
   questionCount: {
@@ -169,7 +206,7 @@ const styles = StyleSheet.create({
 
   question: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "700",
   },
 
@@ -181,9 +218,10 @@ const styles = StyleSheet.create({
   },
 
   selectedOption: {
-    borderWidth: 2,
-    borderColor: "#335CFF",
-  },
+  borderWidth: 2,
+  borderColor: "#335CFF",
+  backgroundColor: "#EEF4FF",
+},
 
   optionText: {
     fontSize: 14,
@@ -255,4 +293,31 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "600",
   },
+  progressContainer: {
+  height: 8,
+  backgroundColor: "#E5E7EB",
+  borderRadius: 20,
+  marginBottom: 20,
+},
+
+progressFillBar: {
+  height: 8,
+  backgroundColor: "#335CFF",
+  borderRadius: 20,
+},
+questionBadge: {
+  width: 40,
+  height: 40,
+  borderRadius: 20,
+  backgroundColor: "#fff",
+  justifyContent: "center",
+  alignItems: "center",
+  marginBottom: 10,
+},
+
+questionBadgeText: {
+  color: "#335CFF",
+  fontWeight: "700",
+  fontSize: 16,
+},
 });

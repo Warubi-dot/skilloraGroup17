@@ -4,16 +4,50 @@ import {
   Text,
   SafeAreaView,
   TouchableOpacity,
-  Image,
   StyleSheet,
   ScrollView,
-  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, router, Stack } from "expo-router";
+import { getLesson, getNextLesson, getPreviousLesson, } from "../app/Services/lessonStore";
+import {VideoView, useVideoPlayer} from "expo-video"
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getModule } from "../app/Services/moduleStore";
+
+
+
+
+
+
+
 
 export default function ModulePlayer() {
- 
+const module = getModule();
+console.log("MODULE:", module);
+console.log("TITTLE:", module?.title);
+console.log("ID:", module?._id)
+
+const getCurrentUser = async () => {
+  const userData = await AsyncStorage.getItem(
+    "user"
+  );
+
+  if (!userData) return null;
+
+  return JSON.parse(userData);
+};
+
+  const [lesson, setCurrentLesson] =
+  useState(getLesson());
+const player = useVideoPlayer(
+  lesson?.videoUrl || "",
+  (player) => {
+    player.loop = false;
+    player.play ();
+  }
+);
+console.log("CURRENT LESSON:", lesson);
+ console.log("VIDEO URL:", lesson?.videoUrl);
   const [activeTab, setActiveTab] =
     useState("Overview");
 
@@ -26,13 +60,15 @@ export default function ModulePlayer() {
         <ScrollView>
 
       <View style={styles.header}>
-        <TouchableOpacity style={styles.circle}>
-             <Link href={("/module")}>
+        <TouchableOpacity
+        onPress={()=> router.back()}
+         style={styles.circle}>
+             
           <Ionicons
             name="chevron-back"
             size={24}
           />
-          </Link>
+        
         </TouchableOpacity>
 
         <Text style={styles.headerTitle}>
@@ -49,34 +85,36 @@ export default function ModulePlayer() {
 
       <View style={styles.videoSection}>
         <Text style={styles.lessonCount}>
-          LESSON 8 OF 12
+          LESSON
         </Text>
 
-        <Image
-          source={{
-            uri: "https://images.unsplash.com/photo-1558655146-d09347e92766",
-          }}
-          style={styles.video}
-        />
-
-        <TouchableOpacity
-          style={styles.playBtn}
-        >
-          <Ionicons
-            name="play"
-            size={35}
-            color="#3366FF"
-          />
-        </TouchableOpacity>
+        <VideoView
+              style={styles.video}
+              player={player}
+              allowsFullscreen
+              allowsPictureInPicture
+              nativeControls
+            />
       </View>
 
       <View style={styles.info}>
         <Text style={styles.courseTitle}>
-          Effective Communication II
+          {lesson?.title}
         </Text>
 
         <TouchableOpacity 
-        onPress={()=>{router.push("/modulecompleted")}}
+                onPress={async () => {
+          try {
+            const user = await getCurrentUser();
+
+            console.log("USER:", user);
+            console.log("MODULE:", module);
+
+            router.push("/modulecompleted");
+          } catch (error) {
+            console.log(error);
+          }
+        }}
         style={styles.doneBtn}>
         <Text
             style={{
@@ -114,15 +152,14 @@ export default function ModulePlayer() {
         )}
       </View>
 
-      <Text style={styles.description}>
-        Learn how to listen actively,
-        speak clearly, resolve conflicts
-        easily and be an excellent
-        communicator.
-      </Text>
+            <Text style={styles.description}>
+          Duration: {lesson?.duration} mins
+        </Text>
 
       <View style={styles.progressCard}>
-        <Text>Lesson Progress                   8 of 12</Text>
+       <Text>
+  Lesson Duration: {lesson?.duration} mins
+</Text>
 
         <View style={styles.progressBg}>
           <View
@@ -135,15 +172,31 @@ export default function ModulePlayer() {
       </View>
 
       <View style={styles.bottomBtns}>
-        <TouchableOpacity
+                <TouchableOpacity
           style={styles.prevBtn}
+          onPress={() => {
+            const previousLesson =
+              getPreviousLesson();
+
+            if (previousLesson) {
+              setCurrentLesson(previousLesson);
+            }
+          }}
         >
-          <Text>Previous</Text>
+                  <Text>Previous</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-        onPress={()=>{router.push("/modulecompleted")}}
-          style={styles.nextBtn}
+        onPress={() => {
+            const nextLesson = getNextLesson();
+
+            if (nextLesson) {
+              setCurrentLesson(nextLesson);
+            } else {
+              router.push("/modulecompleted");
+            }
+          }}
+                    style={styles.nextBtn}
         >
           <Text style={{ color: "#fff" }}>
             Next Lesson

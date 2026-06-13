@@ -1,4 +1,6 @@
-import { Link, Stack, useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
+import { loginUser } from "../app/Services/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import React, { useState } from "react";
 import {View,Text,TextInput,TouchableOpacity,StyleSheet,SafeAreaView,Image, ScrollView, Alert,} from "react-native";
@@ -10,6 +12,61 @@ import { Ionicons } from "@expo/vector-icons";
 
 export default function Loginpage() {
   
+  const router = useRouter();
+
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+const [loading, setLoading] = useState(false);
+
+const handleLogin = async () => {
+  try {
+    setLoading(true);
+
+    const data = await loginUser(
+      email,
+      password
+    );
+
+    console.log(data);
+
+    if (!data.token) {
+      Alert.alert(
+        "Login Failed",
+        "Invalid email or password"
+      );
+      return;
+    }
+
+    await AsyncStorage.setItem(
+      "token",
+      data.token
+    );
+
+    if (data.user) {
+      await AsyncStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+      );
+    }
+
+    Alert.alert(
+      "Success",
+      "Login Successful"
+    );
+
+    router.replace("/(tabs)/Home");
+
+  } catch (error) {
+    console.log(error);
+
+    Alert.alert(
+      "Error",
+      "Unable to login"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
   return (
    <>
     <Stack.Screen
@@ -36,21 +93,25 @@ export default function Loginpage() {
         {/* Email */}
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Email Address</Text>
-          <TextInput
+         <TextInput
             placeholder="Enter email"
             keyboardType="email-address"
+            value={email}
+            onChangeText={setEmail}
             style={styles.input}
-          
-          />
-         
+            />
         </View>
 
         {/* Password */}
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Password</Text>
           <TextInput
-            placeholder="Enter password"
-            style={styles.input}/>
+  placeholder="Enter password"
+  secureTextEntry
+  value={password}
+  onChangeText={setPassword}
+  style={styles.input}
+/>
         
         </View>
     
@@ -59,12 +120,14 @@ export default function Loginpage() {
           <Text style={styles.forgotPassword}>Forgot Password?</Text>
         </TouchableOpacity>
        
-      <TouchableOpacity style={styles.button}>
-    
-       <Link href={("/(tabs)/Home")}> 
-          <Text style={styles.buttonText}>Sign In</Text>
-        </Link>
-      </TouchableOpacity>
+     <TouchableOpacity
+  style={styles.button}
+  onPress={handleLogin}
+>
+  <Text style={styles.buttonText}>
+    {loading ? "Signing In..." : "Sign In"}
+  </Text>
+</TouchableOpacity>
       
 
       {/* Footer */}

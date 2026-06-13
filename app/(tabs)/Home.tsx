@@ -1,4 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
+import { useEffect } from "react";
+import { getModules } from "../Services/modulesApi";
 import {
   View,
   Text,
@@ -9,8 +11,12 @@ import {
 } from "react-native";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Link, router } from "expo-router";
+import { Link, router, useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { setModule } from "../Services/moduleStore";
+
+
 
 interface Course {
   id: string;
@@ -48,6 +54,7 @@ const courses: Course[] = [
 ];
 
 export default function HomeScreen() {
+  const router=useRouter ();
   const [profileImage, setProfileImage] = useState( "https://randomuser.me/api/portraits/women/44.jpg");
  const changeProfilePicture = async () => {
   const result = await ImagePicker.launchImageLibraryAsync({
@@ -64,7 +71,43 @@ export default function HomeScreen() {
 
 }
 };
- 
+ const [user, setUser] = useState<any>(null);
+ useEffect(() => {
+  loadUser();
+}, []);
+
+const loadUser = async () => {
+  try {
+    const storedUser =
+      await AsyncStorage.getItem("user");
+
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Modules
+const [modules, setModules] = useState<any[]>([]);
+useEffect(() => {
+  fetchModules();
+}, []);
+
+const fetchModules = async () => {
+  try {
+    const data = await getModules();
+
+    console.log("Modules:", data);
+
+    setModules(data.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+const [selectedModule, setSelectedModule] = useState<any>(null);
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -74,7 +117,7 @@ export default function HomeScreen() {
       <View style={styles.header}>
         <View>
           <Text style={styles.logo}>Skillora</Text>
-          <Text style={styles.greeting}>Hello, GenesisWorlld</Text>
+          <Text style={styles.greeting}>Hello, {user?.name}</Text>
           <TouchableOpacity>
             <Link href={("/(tabs)/library")}>
           <Text style={styles.subtitle}>
@@ -194,39 +237,79 @@ export default function HomeScreen() {
       </View>
 <View>
       <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
+  horizontal
+  showsHorizontalScrollIndicator={false}
+  contentContainerStyle={{
+    paddingRight: 20,
+  }}
+>
+  {modules.map((module) => (
+   <TouchableOpacity
+      key={module._id}
+      onPress={() => {
+        console.log("CLICKED MODULE:", module);
+
+        setModule(module);
+
+        router.push("/module");
+      }}
+    >
+      <View
+        style={{
+          width: 180,
+          backgroundColor: "#e3f5fa",
+          borderRadius: 20,
+          padding: 16,
+          marginRight: 15,
+        }}
       >
-        {courses.map((course) => (
-          <View key={course.id} style={styles.courseCard}>
-            <Image
-              source={{ uri: course.image }}
-              style={styles.courseImage}
-            />
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: "700",
+            color: "#111827",
+          }}
+        >
+          {module.title}
+        </Text>
 
-            <View style={{ padding: 10 }}>
-              <Text style={styles.courseName}>
-                {course.title}
-              </Text>
+        <Text
+          style={{
+            color: "#6B7280",
+            marginTop: 8,
+          }}
+        >
+          {module.description}
+        </Text>
 
-              <Text style={styles.author}>
-                {course.author}
-              </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: 15,
+          }}
+        >
+          <Text
+            style={{
+              color: "#2563EB",
+              fontWeight: "600",
+            }}
+          >
+            {module.status}
+          </Text>
 
-              <View style={styles.ratingRow}>
-                <Ionicons
-                  name="star"
-                  size={14}
-                  color="#FBBF24"
-                />
-                <Text style={styles.rating}>
-                  {course.rating}
-                </Text>
-              </View>
-            </View>
-          </View>
-        ))}
-      </ScrollView>
+          <Text
+            style={{
+              color: "#6B7280",
+            }}
+          >
+            {module.duration} mins
+          </Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  ))}
+</ScrollView>
       </View>
     </ScrollView>
     </SafeAreaView>

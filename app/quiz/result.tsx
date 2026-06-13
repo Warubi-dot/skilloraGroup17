@@ -12,25 +12,45 @@ import { quizData } from "../data/quizData";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function ResultScreen() {
-  const { answers } = useLocalSearchParams();
+const handleReflectionSubmit = () => {
+  console.log("Reflection:", reflection);
 
-  const selectedAnswers = answers
-    ? JSON.parse(answers as string)
-    : [];
+  router.push("/quiz/formsubmitted");
+};
 
   const [reflection, setReflection] = useState("");
 
-  let score = 0;
+  useLocalSearchParams();
 
-  quizData.forEach((question, index) => {
-    if (
-      selectedAnswers[index] ===
-      question.correctAnswer
-    ) {
-      score++;
-    }
-  });
+const { answers } = useLocalSearchParams();
 
+const selectedAnswers = answers
+  ? JSON.parse(answers as string)
+  : [];
+
+const finalScore = quizData.reduce(
+  (total, question, index) =>
+    total +
+    (selectedAnswers[index] === question.correctAnswer ? 1 : 0),
+  0
+);
+
+const percentage = Math.round(
+  (finalScore / quizData.length) * 100
+);
+
+
+let greeting = "";
+
+if (percentage >= 80) {
+  greeting = "Excellent Work! 🎉";
+} else if (percentage >= 60) {
+  greeting = "Great Job! 👏";
+} else if (percentage >= 40) {
+  greeting = "Good Effort! 👍";
+} else {
+  greeting = "Keep Learning! 💪";
+}
   return (
     <>
       <Stack.Screen
@@ -89,18 +109,20 @@ export default function ResultScreen() {
         </View>
 
         {/* Score */}
-        <Text
-          style={{
-            fontSize: 30,
-            fontWeight: "500",
-            color: "#335CFF",
-            lineHeight: 55,
-            marginBottom: 10,
-          }}
-        >
-          Good Effort! You{"\n"}scored {score}/
-          {quizData.length}.
-        </Text>
+                  <Text
+            style={{
+              fontSize: 30,
+              fontWeight: "500",
+              color: "#335CFF",
+              lineHeight: 55,
+              marginBottom: 10,
+            }}
+          >
+            {greeting}{"\n"}
+            You scored {finalScore}/{quizData.length}
+            {"\n"}
+                      ({percentage}%)
+          </Text>
 
         {/* Reflection Card */}
         <View
@@ -176,9 +198,7 @@ export default function ResultScreen() {
 
         {/* Submit Reflection */}
         <TouchableOpacity
-          onPress={() =>
-            router.push("/quiz/formsubmitted")
-          }
+          onPress={handleReflectionSubmit}
           style={{
             backgroundColor: "#18C29C",
             padding: 15,
@@ -248,28 +268,28 @@ export default function ResultScreen() {
         </View>
 
         {/* Retry Quiz */}
-        <TouchableOpacity
-          onPress={() =>
-            router.replace("/quiz")
-          }
-          style={{
-            backgroundColor: "#335CFF",
-            padding: 15,
-            borderRadius: 18,
-            marginTop: 10,
-          }}
-        >
-          <Text
-            style={{
-              color: "#fff",
-              textAlign: "center",
-              fontSize: 16,
-              fontWeight: "700",
-            }}
-          >
-            Retry Quiz
-          </Text>
-        </TouchableOpacity>
+       {percentage < 80 && (
+  <TouchableOpacity
+    onPress={() => router.replace("/quiz")}
+    style={{
+      backgroundColor: "#335CFF",
+      padding: 15,
+      borderRadius: 18,
+      marginTop: 10,
+    }}
+  >
+    <Text
+      style={{
+        color: "#fff",
+        textAlign: "center",
+        fontSize: 16,
+        fontWeight: "700",
+      }}
+    >
+      Retry Quiz
+    </Text>
+  </TouchableOpacity>
+)}
       </ScrollView>
        {/* Bottom Navigation */}
       <View style={styles.bottomNav}>
